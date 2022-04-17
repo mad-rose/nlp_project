@@ -117,8 +117,8 @@ def main():
         characters=new_char_infos,
     )
 
-    final_dataset.export_to_jsonl(config['output']['filename'])
-
+    final_dataset.export_to_jsonl_create_training_testing_val(config['output']['filename'])
+'''
     with open(TRAIN_KEY_ORDER_FILENAME) as train_key_f:
         train_keys = list(train_key_f.readlines())
         final_dataset.export_to_jsonl_with_selected_keys(
@@ -133,6 +133,6 @@ def main():
         val_keys = list(val_key_f.readlines())
         final_dataset.export_to_jsonl_with_selected_keys(
             config['output']['val_filename'], val_keys)
-    
+'''    
 if __name__ == '__main__':
     main()
