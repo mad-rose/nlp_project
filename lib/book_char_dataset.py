@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Set, Tuple
 
+from sklearn.model_selection import train_test_split
+
 from .database_util import CharacterInfoWithMaskedDescription, DatabaseConnection
 from .database_util import BookKey, CharKey
 from .database_util import BookInfo, CharacterInfo
@@ -192,7 +194,7 @@ class FinalBookCharDataset(object):
         
         return cls(books, characters)
 
-    def export_to_jsonl(self, filename: str):
+    def export_to_jsonl_create_training_testing_val(self, filename: str):
         book_char_data = []
         for char_info in self.char_lookup.values():
             book_key = char_info.book_key
@@ -206,7 +208,13 @@ class FinalBookCharDataset(object):
                 'masked_description': char_info.masked_description,
             })
         write_jsonl(filename, book_char_data)
+        training_data, test_data = train_test_split(book_char_data, test_size=0.3)
+        test_data, val_data = train_test_split(test_data, test_size=0.5)
+        write_jsonl('train_data.json', training_data)
+        write_jsonl('test_data.json', test_data)
+        write_jsonl('val_data.json', val_data)
     
+    '''
     def export_to_jsonl_with_selected_keys(
         self,
         filename: str,
@@ -230,4 +238,4 @@ class FinalBookCharDataset(object):
                 'masked_description': char_info.masked_description,
             })
         write_jsonl(filename, book_char_data)
-        
+        '''
